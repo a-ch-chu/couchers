@@ -83,13 +83,13 @@ def run_foreground():
 
     logger.info(f"Serving on 1751 (secure), 1752 (auth), 1753 (media), and 1754 (jailed)")
 
-    bundle = (server, jailed_server, open_server, media_server)
-    return bundle
+    fg = (server, jailed_server, open_server, media_server)
+    return fg
 
 
-def terminate_foreground(bundle):
-    server, jailed_server, open_server, media_server = bundle
-    server.wait_for_termination(0)
-    jailed_server.wait_for_termination(0)
-    open_server.wait_for_termination(0)
-    media_server.wait_for_termination(0)
+def wait_for_foreground(fg):
+    server, jailed_server, open_server, media_server = fg
+    server.wait_for_termination()
+    jailed_server.wait_for_termination()
+    open_server.wait_for_termination()
+    media_server.wait_for_termination()
