@@ -657,6 +657,7 @@ class InitiatedUpload(Base):
 class LanguageAbilities(Base):
     __tablename__ = "language_abilities"
 
+    id = Column(BigInteger, primary_key=True)
     language = Column(String(length=3), nullable=False)
     fluency = Column(Enum(Fluency), nullable=False, default=Fluency.fluency_unspecified)
     user_id = Column(ForeignKey("users.id"), nullable=False, index=True)
