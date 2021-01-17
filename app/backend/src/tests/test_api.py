@@ -147,7 +147,13 @@ def test_update_profile(db):
                 about_place=api_pb2.NullableStringValue(value="My place"),
                 color=wrappers_pb2.StringValue(value="#111111"),
                 hosting_status=api_pb2.HOSTING_STATUS_CAN_HOST,
-                languages=api_pb2.RepeatedStringValue(exists=True, value=["Binary", "English"]),
+                languages=api_pb2.RepeatedLanguageAbilityValue(
+                    exists=True,
+                    value=api_pb2.LanguageAbility(
+                        code=wrappers_pb2.StringValue(value="eng"),
+                        fluency=api_pb2._LANGUAGEABILITY_FLUENCY.FLUENCY_NATIVE,
+                    ),
+                ),
                 countries_visited=api_pb2.RepeatedStringValue(exists=True, value=["UK", "Aus"]),
                 countries_lived=api_pb2.RepeatedStringValue(exists=True, value=["UK", "Aus"]),
             )
@@ -163,8 +169,7 @@ def test_update_profile(db):
         assert user.lng == -2
         assert user.radius == 321
         assert user.hosting_status == api_pb2.HOSTING_STATUS_CAN_HOST
-        assert "Binary" in user.languages
-        assert "English" in user.languages
+        assert user.language_abilities[0].language == "eng"
 
 
 def test_pending_friend_request_count(db):

@@ -37,6 +37,16 @@ class SmokingLocation(enum.Enum):
     no = 4
 
 
+class Fluency(enum.Enum):
+    fluency_unspecified = 0
+    fluency_say_hello = 1
+    fluency_beginner = 2
+    fluency_intermediate = 3
+    fluency_advanced = 4
+    fluency_fluent = 5
+    fluency_native = 6
+
+
 class User(Base):
     """
     Basic user and profile details
@@ -89,7 +99,7 @@ class User(Base):
     # profile color
     color = Column(String, nullable=False, default="#643073")
     avatar_filename = Column(String, nullable=True)
-    # TODO: array types once we go postgres
+    # deprecated
     languages = Column(String, nullable=True)
     countries_visited = Column(String, nullable=True)
     countries_lived = Column(String, nullable=True)
@@ -642,3 +652,13 @@ class InitiatedUpload(Base):
     @hybrid_property
     def is_valid(self):
         return (self.created <= func.now()) & (self.expiry >= func.now())
+
+
+class LanguageAbilities(Base):
+    __tablename__ = "language_abilities"
+
+    language = Column(String(length=3), nullable=False)
+    fluency = Column(Enum(Fluency), nullable=False, default=Fluency.FLUENCY_UNSPECIFIED)
+    user_id = Column(ForeignKey("users.id"), nullable=False, index=True)
+
+    user = relationship("User", backref="language_abilities")

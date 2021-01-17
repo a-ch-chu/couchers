@@ -191,7 +191,11 @@ class API(api_pb2_grpc.APIServicer):
                 user.hosting_status = hostingstatus2sql[request.hosting_status]
 
             if request.languages.exists:
-                user.languages = "|".join(request.languages.value)
+                if type(request.languages.value) is str:
+                    # deprecated
+                    user.languages = "|".join(request.languages.value)
+                else:
+                    user.language_abilities = request.languages.value
 
             if request.countries_visited.exists:
                 user.countries_visited = "|".join(request.countries_visited.value)
