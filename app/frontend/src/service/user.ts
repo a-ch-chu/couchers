@@ -128,6 +128,7 @@ export async function updateProfile(
   const gender = new wrappers.StringValue().setValue(profile.gender);
   const occupation = new NullableStringValue().setValue(profile.occupation);
   const languages = new RepeatedStringValue()
+    // @ts-expect-error languages has new type, but old type still works for now
     .setValueList(profile.languages)
     .setExists(!!profile.languages);
   const aboutMe = new NullableStringValue().setValue(profile.aboutMe);
@@ -147,6 +148,7 @@ export async function updateProfile(
     .setRadius(radius)
     .setGender(gender)
     .setOccupation(occupation)
+    // @ts-expect-error languages has new type, but old type still works for now
     .setLanguages(languages)
     .setAboutMe(aboutMe)
     .setAboutPlace(aboutPlace)
@@ -162,8 +164,8 @@ export function updateHostingPreference(preferences: HostingPreferenceData) {
   const maxGuests =
     preferences.maxGuests !== null
       ? new NullableUInt32Value()
-          .setValue(preferences.maxGuests)
-          .setIsNull(false)
+        .setValue(preferences.maxGuests)
+        .setIsNull(false)
       : new NullableUInt32Value().setIsNull(true);
   const area = new NullableStringValue().setValue(preferences.area);
   const houseRules = new NullableStringValue().setValue(preferences.houseRules);
